@@ -1,21 +1,68 @@
-.bg-grass {
-    background-color: #69b835 !important;
-}
-
 .bg-bug {
     background-color: #ABC837 !important;
+}
+
+.light-bg-bug {
+    background-color: #c0df46 !important;
+}
+
+.verylight-bg-bug {
+    background-color: #d8ed82 !important;
+}
+
+.ultralight-bg-bug {
+    background-color: #e9f6b6 !important;
 }
 
 .bg-dark {
     background-color: #333333 !important;
 }
 
+.light-bg-dark {
+    background-color: #656565 !important;
+}
+
+.verylight-bg-dark {
+    background-color: #9e9e9e !important;
+}
+
+.ultralight-bg-dark {
+    background-color: #dbdbdb !important;
+}
+
 .bg-dragon {
     background-color: #9494AC !important;
 }
 
+.light-bg-dragon {
+    background-color: #ababbd !important;
+}
+
+.verylight-bg-dragon {
+    background-color: #d8d8e3 !important;
+}
+
+.ultralight-bg-dragon {
+    background-color: #f2f2ff !important;
+}
+
 .bg-electric {
     background-color: #FFE680 !important;
+    color: black;
+}
+
+.light-bg-electric {
+    background-color: #ffefae !important;
+    color: black;
+}
+
+.verylight-bg-electric {
+    background-color: #f8f2d9 !important;
+    color: black;
+}
+
+.ultralight-bg-electric {
+    background-color: #fefaec !important;
     color: black;
 }
 
@@ -24,56 +71,266 @@
     color: black;
 }
 
+.light-bg-fairy {
+    background-color: #f9e1f4 !important;
+    color: black;
+}
+
+.verylight-bg-fairy {
+    background-color: #fff3fc !important;
+    color: black;
+}
+
+.ultralight-bg-fairy {
+    background-color: #fffcfe !important;
+    color: black;
+}
+
 .bg-fighting {
     background-color: #FFB380 !important;
+}
+
+.light-bg-fighting {
+    background-color: #fac7a4 !important;
+}
+
+.verylight-bg-fighting {
+    background-color: #fcd6bd !important;
+}
+
+.ultralight-bg-fighting {
+    background-color: #fbede3 !important;
 }
 
 .bg-fire {
     background-color: #A02C2C !important;
 }
 
+.light-bg-fire {
+    background-color: #af4a4a !important;
+}
+
+.verylight-bg-fire {
+    background-color: #d07b7b !important;
+}
+
+.ultralight-bg-fire {
+    background-color: #fccfcf !important;
+}
+
 .bg-flying {
     background-color: #B7C8B7 !important;
 }
 
-.bg-poison {
-    background-color: #8A6F91 !important;
+.light-bg-flying {
+    background-color: #cadcca !important;
+}
+
+.verylight-bg-flying {
+    background-color: #e2f6e2 !important;
+}
+
+.ultralight-bg-flying {
+    background-color: #f8fff8 !important;
+}
+
+.bg-grass {
+    background-color: #69b835 !important;
+}
+
+.light-bg-grass {
+    background-color: #89cb5e !important;
+}
+
+.verylight-bg-grass {
+    background-color: #bbed99 !important;
+}
+
+.ultralight-bg-grass {
+    background-color: #d8fdbf !important;
 }
 
 .bg-ghost {
     background-color: #3E3748 !important;
 }
 
+.light-bg-ghost {
+    background-color: #625771 !important;
+}
+
+.verylight-bg-ghost {
+    background-color: #b39fcf !important;
+}
+
+.ultralight-bg-ghost {
+    background-color: #ecdfff !important;
+}
+
 .bg-ground {
-    background-color: #F4E3D7 !important;
+    background-color: #c88d62 !important;
     color: black;
 }
 
+.light-bg-ground {
+    background-color: #deaa85 !important;
+}
+
+.verylight-bg-ground {
+    background-color: #f5cfb4 !important;
+}
+
+.ultralight-bg-ground {
+    background-color: #F4E3D7 !important;
+}
+
 .bg-ice {
+    background-color: #a7ffec !important;
+    color: black;
+}
+
+.light-bg-ice {
+    background-color: #b8fff0 !important;
+    color: black;
+}
+
+.verylight-bg-ice {
     background-color: #D5FFF6 !important;
     color: black;
 }
 
-.bg-normal {
-    background-color: #cbcbcb !important;
+.ultralight-bg-ice {
+    background-color: #f0fffc !important;
     color: black;
+}
+
+.bg-normal {
+    background-color: #aaaaaa !important;
+    color: black;
+}
+
+.light-bg-normal {
+    background-color: #bcbcbc !important;
+    color: black;
+}
+
+.verylight-bg-normal {
+    background-color: #e1e1e1 !important;
+    color: black;
+}
+
+.ultralight-bg-normal {
+    background-color: #f9f9f9 !important;
+    color: black;
+}
+
+.bg-poison {
+    background-color: #8A6F91 !important;
+}
+
+.light-bg-poison {
+    background-color: #ad8db6 !important;
+}
+
+.verylight-bg-poison {
+    background-color: #f3d4fb !important;
+}
+
+.ultralight-bg-poison {
+    background-color: #fbeaff !important;
 }
 
 .bg-psychic {
     background-color: #C837AB !important;
+}
 
+.light-bg-psychic {
+    background-color: #e25fc8 !important;
+}
+
+.verylight-bg-psychic {
+    background-color: #fda0ea !important;
+}
+
+.ultralight-bg-psychic {
+    background-color: #ffd9f7 !important;
 }
 
 .bg-rock {
     background-color: #DEAA87 !important;
+}
 
+.light-bg-rock {
+    background-color: #e9bea2 !important;
+}
+
+.verylight-bg-rock {
+    background-color: #fedcc5 !important;
+}
+
+.ultralight-bg-rock {
+    background-color: #ffebdd !important;
+}
+
+.bg-shadow {
+    background-color: #5f5f5f !important;
+}
+
+.light-bg-shadow {
+    background-color: #686868 !important;
+}
+
+.verylight-bg-shadow {
+    background-color: #8a8a8a !important;
+}
+
+.ultralight-bg-shadow {
+    background-color: #cdcdcd !important;
 }
 
 .bg-steel {
     background-color: #999999 !important;
+}
 
+.light-bg-steel {
+    background-color: #b7b7b7 !important;
+}
+
+.verylight-bg-steel {
+    background-color: #d1d1d1 !important;
+}
+
+.ultralight-bg-steel {
+    background-color: #f6f6f6 !important;
 }
 
 .bg-water {
     background-color: #0044AA !important;
+}
+
+.light-bg-water {
+    background-color: #2363c4 !important;
+}
+
+.bg-unknown {
+    background-color: #000000 !important;
+}
+
+.light-bg-unknown {
+    background-color: #2f2f2f !important;
+}
+
+.verylight-bg-unknown {
+    background-color: #5c5c5c !important;
+}
+
+.ultralight-bg-unknown {
+    background-color: #868686 !important;
+}
+
+.verylight-bg-water {
+    background-color: #72aafe !important;
+}
+
+.ultralight-bg-water {
+    background-color: #b5d3ff !important;
 }

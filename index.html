@@ -12,12 +12,13 @@
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="types.css">
+    <link rel="stylesheet" href="loader.css">
 
     <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="script.js"></script>
 </head>
 
-<body onload="init()">
+<body id="body" onload="loadAndRenderPokemon()">
     <div class="bg"></div>
 
     <header>
@@ -25,7 +26,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.html"><img class="pokedex-logo" src="img/pokedex.png"></a>
                 <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control me-2" type="search" placeholder="Search by name" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>
@@ -40,20 +41,20 @@
     <div id="single-pokemon-container" class="d-none" onclick="closeSingleCard()">
         <div class="pokecard" onclick="doNotClose(event)">
             <div class="close-card" onclick="closeSingleCard()"><img src="img/cancel-32.png"></div>
-            <div class="previous-card"><img src="img/arrow-88-32.png"></div>
-            <div class="next-card"><img src="img/arrow-24-32.png"></div>
+            <div id="previous-card" class="previous-card"><img src="img/arrow-88-32.png"></div>
+            <div id="next-card" class="next-card"><img src="img/arrow-24-32.png"></div>
             <div class="pokeball-bg"><img src="img/pokeball_bg.png"></div>
 
-            <div class="pokecard-header">
+            <div id="pokecard-header" class="pokecard-header">
                 <div class="pokecard-subheader">
                     <div class="pokecard-subheader-left">
-                        <h3 id="pokemon-name">Name</h3>
+                        <h3 id="pokemon-name"></h3>
                         <div id="pokemon-types" class="pokemon-types">
-                            <div>Fire</div>
+                            <!-- <div class="pokemon-type">Fire</div> -->
                         </div>
                     </div>
                     <div class="pokecard-subheader-right">
-                        <b id="pokemon-id">#0004</b>
+                        <b id="pokemon-id"></b>
                     </div>
                 </div>
 
@@ -100,7 +101,7 @@
                         tabindex="0">
                         <table>
                             <tbody id="stats-table">
-                                <tr>
+                                <!-- <tr>
                                     <th>HP</th>
                                     <td>65</td>
                                     <td>
@@ -109,7 +110,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -164,6 +165,12 @@
         </div>
     </div> -->
     </div>
+
+
+    <div id="loader" class="loader-container d-none">
+        <div class="loader"></div>
+    </div>
+
 
 </body>
 
