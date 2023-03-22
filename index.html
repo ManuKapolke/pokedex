@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+
+    <link rel="shortcut icon" href="img/pokeball.png" type="image/x-icon">
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="types.css">
+
+    <script src="node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="script.js"></script>
+</head>
+
+<body onload="init()">
+    <div class="bg"></div>
+
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.html"><img class="pokedex-logo" src="img/pokedex.png"></a>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+
+    <div id="all-pokemon-container">
+    </div>
+
+
+    <div id="single-pokemon-container" class="d-none" onclick="closeSingleCard()">
+        <div class="pokecard" onclick="doNotClose(event)">
+            <div class="close-card" onclick="closeSingleCard()"><img src="img/cancel-32.png"></div>
+            <div class="previous-card"><img src="img/arrow-88-32.png"></div>
+            <div class="next-card"><img src="img/arrow-24-32.png"></div>
+            <div class="pokeball-bg"><img src="img/pokeball_bg.png"></div>
+
+            <div class="pokecard-header">
+                <div class="pokecard-subheader">
+                    <div class="pokecard-subheader-left">
+                        <h3 id="pokemon-name">Name</h3>
+                        <div id="pokemon-types" class="pokemon-types">
+                            <div>Fire</div>
+                        </div>
+                    </div>
+                    <div class="pokecard-subheader-right">
+                        <b id="pokemon-id">#0004</b>
+                    </div>
+                </div>
+
+                <img id="pokemon-img" class="pokemon-img" src="">
+            </div>
+
+            <div class="pokecard-body">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="nav-about-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-about" type="button" role="tab" aria-controls="nav-about"
+                            aria-selected="true">About</button>
+                        <button class="nav-link" id="nav-stats-tab" data-bs-toggle="tab" data-bs-target="#nav-stats"
+                            type="button" role="tab" aria-controls="nav-stats" aria-selected="false">Base Stats</button>
+                        <button class="nav-link" id="nav-moves-tab" data-bs-toggle="tab" data-bs-target="#nav-moves"
+                            type="button" role="tab" aria-controls="nav-moves" aria-selected="false">Moves</button>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-about" role="tabpanel"
+                        aria-labelledby="nav-about-tab" tabindex="0">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Species</th>
+                                    <td id="species"></td>
+                                </tr>
+                                <tr>
+                                    <th>Height</th>
+                                    <td id="height"></td>
+                                </tr>
+                                <tr>
+                                    <th>Weight</th>
+                                    <td id="weight"></td>
+                                </tr>
+                                <tr>
+                                    <th>Abilities</th>
+                                    <td id="abilities"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="nav-stats" role="tabpanel" aria-labelledby="nav-stats-tab"
+                        tabindex="0">
+                        <table>
+                            <tbody id="stats-table">
+                                <tr>
+                                    <th>HP</th>
+                                    <td>65</td>
+                                    <td>
+                                        <div class="progress" role="progressbar">
+                                            <div class="progress-bar progress-bar-striped bg-danger" style="width: 40%">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tab-pane fade" id="nav-moves" role="tabpanel" aria-labelledby="nav-moves-tab"
+                        tabindex="0">
+                        <div id="moves-container"></div>
+                    </div>
+                </div>
+
+
+                <!-- <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                        aria-selected="true">Home</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile"
+                        aria-selected="false">Profile</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill"
+                        data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact"
+                        aria-selected="false">Contact</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+                    tabindex="0">...</div>
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab"
+                    tabindex="0">...</div>
+                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab"
+                    tabindex="0">...</div>
+            </div> -->
+            </div>
+        </div>
+
+
+
+
+        <!-- <div class="card">
+        <div id="pokedex" class="card-header">
+            <h1 id="pokemon-name">Name</h1>
+            <img id="pokemon-img" src="">
+        </div>
+        <div class="card-body info-container">
+            <h5 class="card-title">Special title treatment</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div> -->
+    </div>
+
+</body>
+
+</html>
