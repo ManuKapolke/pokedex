@@ -2,8 +2,9 @@ const LOAD_LIMIT = 20;
 const loadedPokemon = [];
 let numberOfRenderedPokemon = 0;
 let totalNumberOfPokemon;
-// let numberOfLoadedPokemon = 0;
-// let currentPokemon;
+const LBS_IN_KG = 0.453592;
+const FT_IN_CM = 30.48;
+let searchIsActive = false;
 
 
 async function loadAndRenderPokemon() {
@@ -12,6 +13,7 @@ async function loadAndRenderPokemon() {
     renderPokemon();
     removeElement('loader');
 }
+
 
 async function loadPokemon(offset = loadedPokemon.length, limit = LOAD_LIMIT) {
     const urlForShortList = getPokemonURL(offset, limit);
@@ -40,8 +42,6 @@ function renderPokemon() {
         setBoxColors(i);
     }
     numberOfRenderedPokemon += LOAD_LIMIT;
-
-    // renderLoader();
 }
 
 
@@ -151,9 +151,13 @@ function capitalizeFirstLetter(string) {
 }
 
 
-
 function getPokemonURL(offset = loadedPokemon.length, limit = LOAD_LIMIT) {
     return `https://pokeapi.co/api/v2/pokemon/?offset=${offset}&limit=${limit}`;
+}
+
+
+function getPokemonNameURL(name) {
+    return `https://pokeapi.co/api/v2/pokemon/${name}`;
 }
 
 
@@ -162,7 +166,8 @@ window.onscroll = async function () {
     const maxHeight = document.body.scrollHeight;
 
     if (current == maxHeight) {
-        loadAndRenderPokemon();
+        if (!searchIsActive)
+            loadAndRenderPokemon();
     }
 };
 
@@ -221,8 +226,8 @@ function renderPokecard(index) {
 
     // About
     document.getElementById('species').innerHTML = loadedPokemon[index]['species']['name'];
-    document.getElementById('height').innerHTML = loadedPokemon[index]['height'] + ' ft';
-    document.getElementById('weight').innerHTML = loadedPokemon[index]['weight'] + ' lbs';
+    document.getElementById('height').innerHTML = `${turnHeightIntoCM(loadedPokemon[index]['height'])} cm`;
+    document.getElementById('weight').innerHTML = `${turnWeightIntoKG(loadedPokemon[index]['weight'])} kg`;
 
     const abilities = [];
     for (let i = 0; i < loadedPokemon[index]['abilities'].length; i++) {
@@ -267,6 +272,15 @@ function renderPokecard(index) {
 }
 
 
+function turnHeightIntoCM(height) {
+    return height * 10;
+}
+
+
+function turnWeightIntoKG(height) {
+    return (height / 10).toFixed(1);
+}
+
 
 
 function closeSingleCard() {
@@ -300,6 +314,11 @@ function removeElement(id) {
 }
 
 
+function clearElement(id) {
+    document.getElementById(id).innerHTML = '';
+}
+
+
 function isEven(n) {
     return n % 2 == 0;
 }
@@ -308,3 +327,5 @@ function isEven(n) {
 function isOdd(n) {
     return Math.abs(n % 2) == 1;
 }
+
+
