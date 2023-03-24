@@ -1,26 +1,18 @@
 /*-------------------------------------
 Search
 --------------------------------------*/
-let loadedPokemonForSearch = []; // TODO: doch alles bei loadedPokemon hinzufügen und dann in closeSearch() wieder rausschmeißen
-// Nachladen für Suche mit vielen Ergebnissen?
+let loadedPokemonForSearch = [];
+let searchString = '';
 
 async function search() {
     searchIsActive = true;
-    let searchString = document.getElementById('search-input').value.toLowerCase();
+    searchString = document.getElementById('search-input').value.toLowerCase();
 
     // resetLoadedPokemonArray();
     showLoadedPokemon();
-    showElement('loader');
     removeUnsearchedPokemon(searchString);
-    await loadFurtherSearchedPokemon(searchString);
-    concatenateLoadedPokemonArrays();
-    console.log('Loaded pokemon:', loadedPokemon);
-    // renderFurtherSearchedPokemon(searchString);
-    renderPokemon();
-    numberOfRenderedPokemon += loadedPokemonForSearch.length;
-    console.log('#rendered pokemon:', numberOfRenderedPokemon);
+    await loadAndRenderFurtherSearchedPokemon(searchString);
     showElement('reset-btn');
-    removeElement('loader');
 }
 
 
@@ -41,13 +33,40 @@ function getUnsearchedPokemonToRemove(searchString) {
 }
 
 
-async function loadFurtherSearchedPokemon(searchString) {
-    let names = await getSearchedPokemonNames(searchString);
+async function loadAndRenderFurtherSearchedPokemon(searchString) {
+    showElement('loader');
+    await loadFurtherSearchedPokemon(searchString);
+    concatenateLoadedPokemonArrays();
+    console.log('Loaded pokemon:', loadedPokemon);
+    renderPokemon();
+    numberOfRenderedPokemon += loadedPokemonForSearch.length;
+    console.log('#rendered pokemon:', numberOfRenderedPokemon);
+    removeElement('loader');
+}
+
+
+async function loadFurtherSearchedPokemon(searchString, loadCount = LOAD_LIMIT) {
     loadedPokemonForSearch = [];
+    let offset = loadedPokemon.length;
+    let names = await getSearchedPokemonNames(searchString);
+
     console.log('Searched names:', names);
 
-    for (let i = 0; i < names.length; i++) {
-        const url = getPokemonNameURL(names[i]);
+    const searchedPokemonAlreadyLoaded = loadedPokemon.filter(obj => obj.name.toLowerCase().includes(searchString));
+
+    let firstIndexToLoad = 0;
+    if (searchedPokemonAlreadyLoaded.length) {
+        firstIndexToLoad = names.indexOf(searchedPokemonAlreadyLoaded.at(-1)['name']) + 1;
+    }
+    const numberOfNamesToLoad = Math.min(names.length - firstIndexToLoad, loadCount);
+    const lastIndexToLoadExcluded = firstIndexToLoad + numberOfNamesToLoad;
+    let namesToLoad = names.slice(firstIndexToLoad, lastIndexToLoadExcluded)
+    console.log('Searched names to load:', namesToLoad);
+
+
+
+    for (let i = 0; i < namesToLoad.length; i++) {
+        const url = getPokemonNameURL(namesToLoad[i]);
         let responsePokemon = await fetch(url);
         let pokemonAsJson = await responsePokemon.json();
         loadedPokemonForSearch.push(pokemonAsJson);
@@ -56,14 +75,14 @@ async function loadFurtherSearchedPokemon(searchString) {
 }
 
 
-async function getSearchedPokemonNames(searchString) {
-    let names = await getAllPokemonNames();
+async function getSearchedPokemonNames(searchString, offset = 0, limit = totalNumberOfPokemon) {
+    let names = await getPokemonNames(offset, limit);
     return names.filter(name => name.toLowerCase().includes(searchString));
 }
 
 
-async function getAllPokemonNames() {
-    const url = getPokemonURL(loadedPokemon.length, totalNumberOfPokemon);
+async function getPokemonNames(offset = 0, limit = totalNumberOfPokemon) {
+    const url = getPokemonURL(offset, limit);
     let responseAllNames = await fetch(url);
     let AllNamesAsJson = await responseAllNames.json();
     let names = [];

@@ -150,8 +150,10 @@ window.onscroll = async function () {
     const current = document.documentElement.scrollTop + window.innerHeight;
     const maxHeight = document.body.scrollHeight;
 
-    if (current == maxHeight) {
-        if (loadedPokemon.length < totalNumberOfPokemon && !searchIsActive)
+    if (current == maxHeight && loadedPokemon.length < totalNumberOfPokemon) {
+        if (searchIsActive)
+            loadAndRenderFurtherSearchedPokemon(searchString);
+        else
             loadAndRenderPokemon();
     }
 };
@@ -196,12 +198,16 @@ function renderPokecard(index) {
         document.getElementById('previous-card').onclick = function () { openSingleCard(index - 1); }
     }
     if (index === loadedPokemon.length - 1) {
-        if (loadedPokemon.length === totalNumberOfPokemon || searchIsActive) {
+        if (loadedPokemon.length === totalNumberOfPokemon) {
             hideElement('next-card');
         }
         else {
             showElement('next-card');
-            document.getElementById('next-card').onclick = async function () { await loadAndRenderPokemon(); openSingleCard(index + 1); }
+
+            if (searchIsActive)
+                document.getElementById('next-card').onclick = async function () { await loadAndRenderFurtherSearchedPokemon(searchString); openSingleCard(index + 1); }
+            else
+                document.getElementById('next-card').onclick = async function () { await loadAndRenderPokemon(); openSingleCard(index + 1); }
         }
     }
     else {
