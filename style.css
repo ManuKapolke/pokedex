@@ -7,11 +7,11 @@
     --poke-green-light: hsl(166, 59%, 61%);
     --poke-green-verylight: hsl(166, 59%, 76%);
     --poke-green-ultralight: hsl(166, 59%, 90%);
-    --poke-blue: hsl(208, 99%, 73%);
+    --poke-blue: #76bffe;
     --poke-blue-light: hsl(208, 99%, 79%);
     --poke-blue-verylight: hsl(208, 99%, 94%);
     --poke-blue-ultralight: hsl(208, 99%, 98%);
-    --poke-yellow: hsl(43, 100%, 72%);
+    --poke-yellow: #ffd770;
     --poke-yellow-light: hsl(43, 100%, 78%);
     --poke-yellow-verylight: hsl(43, 100%, 93%);
     --poke-yellow-ultralight: hsl(43, 100%, 98%);
@@ -103,7 +103,7 @@ header {
     height: 200px;
     width: 260px;
     margin: 12px;
-    padding: 20px;
+    padding: 18px;
     cursor: pointer;
     position: relative;
     border-radius: 30px;
@@ -159,7 +159,7 @@ header {
 .pokebox-ball-bg {
     position: absolute;
     bottom: 8px;
-    right: 20px;
+    right: 10px;
 }
 
 .pokebox-ball-bg img {
@@ -175,7 +175,7 @@ header {
 .pokeball-bg {
     position: absolute;
     top: 90px;
-    left: 90px;
+    left: 105px;
 }
 
 .pokeball-bg img {
@@ -309,6 +309,14 @@ header {
 table,
 tr {
     width: 100%;
+}
+
+tr {
+    height: 32px;
+}
+
+#nav-about tr {
+    vertical-align: top;
 }
 
 th {
