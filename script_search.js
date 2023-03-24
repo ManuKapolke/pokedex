@@ -1,17 +1,24 @@
 /*-------------------------------------
 Search
 --------------------------------------*/
-let loadedPokemonForSearch = [];
+let loadedPokemonForSearch = []; // TODO: doch alles bei loadedPokemon hinzufügen und dann in closeSearch() wieder rausschmeißen
+// Nachladen für Suche mit vielen Ergebnissen?
 
 async function search() {
     searchIsActive = true;
     let searchString = document.getElementById('search-input').value.toLowerCase();
 
+    // resetLoadedPokemonArray();
     showLoadedPokemon();
     showElement('loader');
     removeUnsearchedPokemon(searchString);
     await loadFurtherSearchedPokemon(searchString);
-    renderFurtherSearchedPokemon(searchString);
+    concatenateLoadedPokemonArrays();
+    console.log('Loaded pokemon:', loadedPokemon);
+    // renderFurtherSearchedPokemon(searchString);
+    renderPokemon();
+    numberOfRenderedPokemon += loadedPokemonForSearch.length;
+    console.log('#rendered pokemon:', numberOfRenderedPokemon);
     showElement('reset-btn');
     removeElement('loader');
 }
@@ -57,10 +64,8 @@ async function getSearchedPokemonNames(searchString) {
 
 async function getAllPokemonNames() {
     const url = getPokemonURL(loadedPokemon.length, totalNumberOfPokemon);
-
     let responseAllNames = await fetch(url);
     let AllNamesAsJson = await responseAllNames.json();
-
     let names = [];
 
     for (let i = 0; i < AllNamesAsJson['results'].length; i++) {
@@ -71,52 +76,57 @@ async function getAllPokemonNames() {
 }
 
 
-function renderFurtherSearchedPokemon(searchString) {
-    for (let i = 0; i < loadedPokemonForSearch.length; i++) {
-        renderPokeboxForSearch(i);
-    }
-    for (let i = 0; i < loadedPokemonForSearch.length; i++) {
-        setBoxColorsForSearch(i);
-    }
+function concatenateLoadedPokemonArrays() {
+    loadedPokemon = loadedPokemon.concat(loadedPokemonForSearch);
 }
 
 
-function renderPokeboxForSearch(index) {
-    const container = document.getElementById('all-pokemon-container');
-    let idIndex = loadedPokemon.length + index;
-
-    container.innerHTML += getPokeboxHtmlFrame(idIndex);
-
-    document.getElementById('pokebox-name-' + idIndex).innerHTML = capitalizeFirstLetter(loadedPokemonForSearch[index]['name']);
-
-    for (let i = 0; i < loadedPokemonForSearch[index]['types'].length; i++) {
-        const type = capitalizeFirstLetter(getTypeForSearch(index, i));
-        document.getElementById('pokebox-types-' + idIndex).innerHTML += `<div class="pokebox-type-${idIndex}">${type}</div>`;
-    }
-
-    document.getElementById('pokebox-id-' + idIndex).innerHTML = '#' + loadedPokemonForSearch[index]['id'].toString().padStart(4, '0');
-
-    document.getElementById('pokebox-img-' + idIndex).src = loadedPokemonForSearch[index]['sprites']['other']['official-artwork']['front_default'];
+// function renderFurtherSearchedPokemon(searchString) {
+//     for (let i = 0; i < loadedPokemonForSearch.length; i++) {
+//         renderPokeboxForSearch(i);
+//     }
+//     for (let i = 0; i < loadedPokemonForSearch.length; i++) {
+//         setBoxColorsForSearch(i);
+//     }
+// }
 
 
-}
+// function renderPokeboxForSearch(index) {
+//     const container = document.getElementById('all-pokemon-container');
+//     let idIndex = loadedPokemon.length + index;
+
+//     container.innerHTML += getPokeboxHtmlFrame(idIndex);
+
+//     document.getElementById('pokebox-name-' + idIndex).innerHTML = capitalizeFirstLetter(loadedPokemonForSearch[index]['name']);
+
+//     for (let i = 0; i < loadedPokemonForSearch[index]['types'].length; i++) {
+//         const type = capitalizeFirstLetter(getTypeForSearch(index, i));
+//         document.getElementById('pokebox-types-' + idIndex).innerHTML += `<div class="pokebox-type-${idIndex}">${type}</div>`;
+//     }
+
+//     document.getElementById('pokebox-id-' + idIndex).innerHTML = '#' + loadedPokemonForSearch[index]['id'].toString().padStart(4, '0');
+
+//     document.getElementById('pokebox-img-' + idIndex).src = loadedPokemonForSearch[index]['sprites']['other']['official-artwork']['front_default'];
 
 
-function getTypeForSearch(index, typeIndex) {
-    return loadedPokemonForSearch[index]['types'][typeIndex]['type']['name'];
-}
+// }
 
 
-function setBoxColorsForSearch(index) {
-    let type = getTypeForSearch(index, 0);
-    let idIndex = loadedPokemon.length + index;
+// function getTypeForSearch(index, typeIndex) {
+//     return loadedPokemonForSearch[index]['types'][typeIndex]['type']['name'];
+// }
 
-    document.getElementById('pokebox-' + idIndex).classList.add('bg-' + type);
 
-    for (let i = 0; i < loadedPokemonForSearch[index]['types'].length; i++) {
-        document.getElementsByClassName('pokebox-type-' + idIndex)[i].classList.add('light-bg-' + type);
-    }
-}
+// function setBoxColorsForSearch(index) {
+//     let type = getTypeForSearch(index, 0);
+//     let idIndex = loadedPokemon.length + index;
+
+//     document.getElementById('pokebox-' + idIndex).classList.add('bg-' + type);
+
+//     for (let i = 0; i < loadedPokemonForSearch[index]['types'].length; i++) {
+//         document.getElementsByClassName('pokebox-type-' + idIndex)[i].classList.add('light-bg-' + type);
+//     }
+// }
 
 
 function closeSearch() {

@@ -1,5 +1,5 @@
 const LOAD_LIMIT = 20;
-const loadedPokemon = [];
+let loadedPokemon = [];
 let numberOfRenderedPokemon = 0;
 let totalNumberOfPokemon;
 const LBS_IN_KG = 0.453592;
@@ -11,6 +11,7 @@ async function loadAndRenderPokemon() {
     showElement('loader');
     await loadPokemon();
     renderPokemon();
+    numberOfRenderedPokemon += LOAD_LIMIT;
     removeElement('loader');
 }
 
@@ -41,7 +42,6 @@ function renderPokemon() {
     for (let i = startIndex; i < loadedPokemon.length; i++) {
         setBoxColors(i);
     }
-    numberOfRenderedPokemon += LOAD_LIMIT;
 }
 
 
@@ -88,21 +88,6 @@ function setBoxColors(index) {
         document.getElementsByClassName('pokebox-type-' + index)[i].classList.add('light-bg-' + type);
     }
 }
-
-
-// function renderLoader() {
-//     document.getElementById('body').innerHTML += `
-//         <div class="wrapper">
-//             <div class="circle"></div>
-//             <div class="circle"></div>
-//             <div class="circle"></div>
-//             <div class="shadow"></div>
-//             <div class="shadow"></div>
-//             <div class="shadow"></div>
-//             <span>Loading</span>
-//         </div>
-//     `;
-// }
 
 
 function setCardColors(index) {
@@ -166,7 +151,7 @@ window.onscroll = async function () {
     const maxHeight = document.body.scrollHeight;
 
     if (current == maxHeight) {
-        if (!searchIsActive)
+        if (loadedPokemon.length < totalNumberOfPokemon && !searchIsActive)
             loadAndRenderPokemon();
     }
 };
@@ -211,16 +196,19 @@ function renderPokecard(index) {
         document.getElementById('previous-card').onclick = function () { openSingleCard(index - 1); }
     }
     if (index === loadedPokemon.length - 1) {
-        showElement('next-card');
-        document.getElementById('next-card').onclick = async function () { await loadAndRenderPokemon(); openSingleCard(index + 1); }
+        if (loadedPokemon.length === totalNumberOfPokemon || searchIsActive) {
+            hideElement('next-card');
+        }
+        else {
+            showElement('next-card');
+            document.getElementById('next-card').onclick = async function () { await loadAndRenderPokemon(); openSingleCard(index + 1); }
+        }
     }
     else {
         showElement('next-card');
         document.getElementById('next-card').onclick = function () { openSingleCard(index + 1); }
     }
-    if (index === totalNumberOfPokemon - 1) {
-        hideElement('next-card');
-    }
+
 
 
 
