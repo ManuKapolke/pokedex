@@ -43,10 +43,10 @@
     </div>
 
 
-    <div id="single-pokemon-container" class="d-none" onclick="closeSingleCard()">
+    <div id="single-pokemon-container" class="d-none" onclick="closePokecard()">
 
         <div class="pokecard" onclick="doNotClose(event)">
-            <div class="close-card" onclick="closeSingleCard()"><img src="img/cancel-32.png"></div>
+            <div class="close-card" onclick="closePokecard()"><img src="img/cancel-32.png"></div>
             <div id="previous-card" class="previous-card"><img src="img/arrow-88-32.png"></div>
             <div id="next-card" class="next-card"><img src="img/arrow-24-32.png"></div>
             <div class="pokeball-bg"><img src="img/pokeball_bg.png"></div>
@@ -55,7 +55,7 @@
                 <div class="pokecard-subheader">
                     <div class="pokecard-subheader-left">
                         <h3 id="pokemon-name"></h3>
-                        <div id="pokemon-types" class="pokemon-types"></div>
+                        <div id="pokemon-types" class="poketypes"></div>
                     </div>
                     <div class="pokecard-subheader-right">
                         <b id="pokemon-id"></b>
