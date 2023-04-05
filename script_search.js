@@ -1,6 +1,8 @@
 let loadedPokemonForSearch = [];
 let searchString = '';
 
+// TODO: previous und next card im search mode (nur durch gesuchte pokemon laufen lassen)
+
 async function search() {
     searchIsActive = true;
     searchString = document.getElementById('search-input').value.toLowerCase();

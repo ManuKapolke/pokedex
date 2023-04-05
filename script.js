@@ -1,6 +1,7 @@
 const LOAD_LIMIT = 20;
 const LBS_IN_KG = 0.453592;
 const FT_IN_CM = 30.48;
+const MAX_STAT_VALUE = 160;
 let loadedPokemon = [];
 let numberOfRenderedPokemon = 0;
 let totalNumberOfPokemon;
@@ -100,8 +101,9 @@ function renderPokemonName(index, elemId = `pokebox-name-${index}`) {
 
 function renderPokemonTypes(index, elemId = `pokebox-types-${index}`) {
     clearElement(elemId);
-    for (let i = 0; i < loadedPokemon[index]['types'].length; i++) {
-        const type = capitalizeFirstLetter(getLoadedPokemonType(index, i));
+    const types = getLoadedPokemonTypes(index);
+    for (let i = 0; i < types.length; i++) {
+        const type = capitalizeFirstLetter(types[i]);
         document.getElementById(elemId).innerHTML += `<div class="${elemId}">${type}</div>`;
     }
 }
@@ -126,21 +128,22 @@ function setBoxColors(index) {
 
 
 function setBackgroundDependentOnFirstType(index) {
-    const firstType = getLoadedPokemonType(index, 0);
+    const firstType = getLoadedPokemonTypes(index)[0];
     document.getElementById(`pokebox-${index}`).classList.add(`bg-${firstType}`);
 }
 
 
 function setLightBackgroundDependentOnFirstType(index) {
-    const firstType = getLoadedPokemonType(index, 0);
-    for (let i = 0; i < loadedPokemon[index]['types'].length; i++) {
+    const types = getLoadedPokemonTypes(index);
+    const firstType = types[0];
+    for (let i = 0; i < types.length; i++) {
         document.getElementsByClassName(`pokebox-types-${index}`)[i].classList.add(`light-bg-${firstType}`);
     }
 }
 
 
-function getLoadedPokemonType(index, typeIndex) {
-    return loadedPokemon[index]['types'][typeIndex]['type']['name'];
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 
@@ -159,206 +162,65 @@ function getLoadedPokemonImage(index) {
 }
 
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+function getLoadedPokemonTypes(index) {
+    let types = [];
+    for (let i = 0; i < loadedPokemon[index]['types'].length; i++) {
+        const type = loadedPokemon[index]['types'][i]['type']['name'];
+        types.push(type);
+    }
+    return types;
 }
 
 
-/*--------------------------------------------------
-Open/Render Single Pokemon Details ("Pokecard")
----------------------------------------------------*/
-async function openPokecard(index) {
-    veilBackground();
-    showElement('single-pokemon-container');
-    await renderPokecard(index);
-    setCardColors(index);
+function getLoadedPokemonSpecies(index) {
+    return loadedPokemon[index]['species']['name'];
 }
 
 
-function closePokecard() {
-    removeElement('single-pokemon-container');
-    unveilBackground();
+function getLoadedPokemonHeight(index) {
+    let height = loadedPokemon[index]['height'];
+    let heightInCM = turnHeightIntoCM(height);
+    return heightInCM;
 }
 
 
-function veilBackground() {
-    document.getElementById('all-pokemon-container').style.opacity = 0.3;
-    document.getElementById('body').classList.add('no-scrolling');
+function getLoadedPokemonWeight(index) {
+    let weight = loadedPokemon[index]['weight'];
+    let weightInKG = turnWeightIntoKG(weight);
+    return weightInKG;
 }
 
 
-function unveilBackground() {
-    document.getElementById('all-pokemon-container').style.opacity = 1;
-    document.getElementById('body').classList.remove('no-scrolling');
-}
-
-
-async function renderPokecard(index) {
-    renderPokecardHeader(index);
-    await setPreviousCardButton(index);
-    await setNextCardButton(index);
-
-
-
-
-    // About
-    document.getElementById('species').innerHTML = loadedPokemon[index]['species']['name'];
-    document.getElementById('height').innerHTML = `${turnHeightIntoCM(loadedPokemon[index]['height'])} cm`;
-    document.getElementById('weight').innerHTML = `${turnWeightIntoKG(loadedPokemon[index]['weight'])} kg`;
-
-    const abilities = [];
+function getLoadedPokemonAbilities(index) {
+    let abilities = [];
     for (let i = 0; i < loadedPokemon[index]['abilities'].length; i++) {
         const ability = loadedPokemon[index]['abilities'][i]['ability']['name'];
         abilities.push(ability);
     }
-    document.getElementById('abilities').innerHTML = abilities.join(', ');
+    return abilities;
+}
 
-    // Base Stats
-    const MAX_STAT_VALUE = 160;
-    document.getElementById('stats-table').innerHTML = '';
+
+function getLoadedPokemonStats(index) {
+    let stats = [];
     for (let i = 0; i < loadedPokemon[index]['stats'].length; i++) {
         const statName = loadedPokemon[index]['stats'][i]['stat']['name'];
         const statValue = loadedPokemon[index]['stats'][i]['base_stat'];
         const statPercent = Math.round(statValue * (100 / MAX_STAT_VALUE));
-        document.getElementById('stats-table').innerHTML += `
-            <tr>
-                <th>${statName}</th>
-                <td>${statValue}</td>
-                <td>
-                    <div class="progress" role="progressbar">
-                        <div class="progress-bar progress-bar-striped bg-danger" style="width:${statPercent}%">
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        `;
-
-        // if (statValue > MAX_STAT_VALUE)
-        //     console.warn('statValue = ', statValue, ' > MAX_STAT_VALUE');
+        const stat = { name: statName, value: statValue, percent: statPercent };
+        stats.push(stat);
     }
+    return stats;
+}
 
-    // Moves
-    document.getElementById('moves-container').innerHTML = '';
+
+function getLoadedPokemonMoves(index) {
+    let moves = [];
     for (let i = 0; i < loadedPokemon[index]['moves'].length; i++) {
         const move = loadedPokemon[index]['moves'][i]['move']['name'];
-        document.getElementById('moves-container').innerHTML += `<div id="move-${index}-${i}">${move}</div>`;
+        moves.push(move);
     }
-}
-
-
-function renderPokecardHeader(index) {
-    renderPokemonName(index, 'pokemon-name');
-    renderPokemonTypes(index, 'pokemon-types');
-    renderPokemonId(index, 'pokemon-id');
-    renderPokemonImage(index, 'pokemon-img');
-}
-
-
-async function setPreviousCardButton(index) {
-    await hideOrShowPreviousCardButton(index);
-    setOnclickForPreviousCardButton(index);
-}
-
-
-async function hideOrShowPreviousCardButton(index) {
-    if (isFirstIndex(index) || await isFirstIndexOfSearchedPokemon(index))
-        hideElement('previous-card');
-    else
-        showElement('previous-card');
-}
-
-
-function setOnclickForPreviousCardButton(index) {
-    // if (index > 0) {        
-    document.getElementById('previous-card').onclick = () => {
-        onclickForPreviousCardButton(index);
-    }
-    // }
-}
-
-
-function onclickForPreviousCardButton(index) {
-    openPokecard(index - 1);
-}
-
-
-async function setNextCardButton(index) {
-    await showOrHideNextCardButton(index);
-    setOnclickForNextCardButton(index);
-}
-
-
-async function showOrHideNextCardButton(index) {
-    if (isLastIndexOfAllPokemon(index) || await isLastIndexOfSearchedPokemon(index))
-        hideElement('next-card');
-    else
-        showElement('next-card');
-}
-
-
-function setOnclickForNextCardButton(index) {
-    if (isLastIndexOfLoadedPokemon(index)) {
-        document.getElementById('next-card').onclick = async () => {
-            onclickForNextCardButtonInLastCard(index);
-        }
-    }
-    else {
-        document.getElementById('next-card').onclick = () => {
-            onclickForNextCardButton(index);
-        }
-    }
-}
-
-
-async function onclickForNextCardButtonInLastCard(index) {
-    if (searchIsActive)
-        await loadAndRenderFurtherSearchedPokemon(searchString);
-    else
-        await loadAndRenderPokemon();
-    openPokecard(index + 1);
-}
-
-
-function onclickForNextCardButton(index) {
-    openPokecard(index + 1);
-}
-
-
-function isFirstIndex(index) {
-    return index === 0;
-}
-
-
-async function isFirstIndexOfSearchedPokemon(index) {
-    return searchIsActive && await isFirstSearchedName(index);
-}
-
-
-async function isFirstSearchedName(index) {
-    let searchedNames = await getSearchedPokemonNames(searchString);
-    return getLoadedPokemonName(index) === searchedNames.at(0);
-}
-
-
-
-function isLastIndexOfLoadedPokemon(index) {
-    return index === loadedPokemon.length - 1;
-}
-
-
-function isLastIndexOfAllPokemon(index) {
-    return index === totalNumberOfPokemon - 1;
-}
-
-
-async function isLastIndexOfSearchedPokemon(index) {
-    return searchIsActive && await isLastSearchedName(index);
-}
-
-
-async function isLastSearchedName(index) {
-    let searchedNames = await getSearchedPokemonNames(searchString);
-    return getLoadedPokemonName(index) === searchedNames.at(-1);
+    return moves;
 }
 
 
@@ -369,46 +231,6 @@ function turnHeightIntoCM(height) {
 
 function turnWeightIntoKG(height) {
     return (height / 10).toFixed(1);
-}
-
-
-
-
-
-
-
-function setCardColors(index) {
-    const firstType = getLoadedPokemonType(index, 0);
-
-    document.getElementById('pokecard-header').className = 'pokecard-header bg-' + firstType;
-
-    for (let i = 0; i < loadedPokemon[index]['types'].length; i++) {
-        document.getElementsByClassName('pokemon-types')[i].className = 'pokemon-types light-bg-' + firstType;
-    }
-
-    for (let i = 0; i < loadedPokemon[index]['stats'].length; i++) {
-        document.getElementsByClassName('progress-bar')[i].className = 'progress-bar progress-bar-striped bg-' + firstType;
-    }
-
-    for (let i = 0; i < loadedPokemon[index]['moves'].length; i++) {
-        const bgClass = isEven(i) ? `verylight-bg-${firstType}` : `ultralight-bg-${firstType}`;
-        document.getElementById(`move-${index}-${i}`).className = bgClass;
-    }
-}
-
-
-function isEven(n) {
-    return n % 2 == 0;
-}
-
-
-function isOdd(n) {
-    return Math.abs(n % 2) == 1;
-}
-
-
-function doNotClose(event) {
-    event.stopPropagation();
 }
 
 
