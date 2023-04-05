@@ -61,16 +61,15 @@ async function hideOrShowPreviousCardButton(index) {
 
 
 function setOnclickForPreviousCardButton(index) {
-    // if (index > 0) {        
     document.getElementById('previous-card').onclick = () => {
         onclickForPreviousCardButton(index);
     }
-    // }
 }
 
 
-function onclickForPreviousCardButton(index) {
-    openPokecard(index - 1);
+async function onclickForPreviousCardButton(index) {
+    let previousIndex = searchIsActive ? await getPreviousSearchedIndex(index) : index - 1;
+    openPokecard(previousIndex);
 }
 
 
@@ -107,12 +106,14 @@ async function onclickForNextCardButtonInLastCard(index) {
         await loadAndRenderFurtherSearchedPokemon();
     else
         await loadAndRenderPokemon();
-    openPokecard(index + 1);
+
+    onclickForNextCardButton(index);
 }
 
 
-function onclickForNextCardButton(index) {
-    openPokecard(index + 1);
+async function onclickForNextCardButton(index) {
+    const nextIndex = searchIsActive ? await getNextSearchedIndex(index) : index + 1;
+    openPokecard(nextIndex);
 }
 
 
@@ -150,6 +151,36 @@ async function isLastIndexOfSearchedPokemon(index) {
 async function isLastSearchedName(index) {
     let searchedNames = await getSearchedPokemonNames();
     return getLoadedPokemonName(index) === searchedNames.at(-1);
+}
+
+
+async function getPreviousSearchedIndex(index) {
+    const previousName = await getPreviousSearchedName(index);
+    const indexOfPreviousName = loadedPokemon.findIndex(obj => obj['name'] === previousName);
+    return indexOfPreviousName;
+}
+
+
+async function getPreviousSearchedName(index) {
+    const searchedNames = await getSearchedPokemonNames();
+    const currentName = getLoadedPokemonName(index);
+    const indexOfCurrentName = searchedNames.indexOf(currentName);
+    return searchedNames.at(indexOfCurrentName - 1);
+}
+
+
+async function getNextSearchedIndex(index) {
+    const nextName = await getNextSearchedName(index);
+    const indexOfNextName = loadedPokemon.findIndex(obj => obj['name'] === nextName);
+    return indexOfNextName;
+}
+
+
+async function getNextSearchedName(index) {
+    const searchedNames = await getSearchedPokemonNames();
+    const currentName = getLoadedPokemonName(index);
+    const indexOfCurrentName = searchedNames.indexOf(currentName);
+    return searchedNames.at(indexOfCurrentName + 1);
 }
 
 

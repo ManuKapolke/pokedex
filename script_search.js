@@ -1,7 +1,6 @@
-let loadedPokemonForSearch = [];
+let reloadedPokemonForSearch = [];
 let searchString = '';
 
-// TODO: previous und next card im search mode (nur durch gesuchte pokemon laufen lassen)
 
 async function search() {
     searchIsActive = true;
@@ -37,18 +36,18 @@ async function loadAndRenderFurtherSearchedPokemon() {
     concatenateLoadedPokemonArrays();
     renderPokemon();
     removeElement('loader');
-    numberOfRenderedPokemon += loadedPokemonForSearch.length;
+    numberOfRenderedPokemon += reloadedPokemonForSearch.length;
 }
 
 
 async function loadFurtherSearchedPokemon(loadCount = LOAD_LIMIT) {
-    loadedPokemonForSearch = [];
+    reloadedPokemonForSearch = [];
     let namesToLoad = await getUnloadedSearchedPokemonNames(loadCount);
 
     for (let i = 0; i < namesToLoad.length; i++) {
         const url = getPokemonDetailsURL(namesToLoad[i]);
         let pokemon = await fetchAsJson(url);
-        loadedPokemonForSearch.push(pokemon);
+        reloadedPokemonForSearch.push(pokemon);
     }
 }
 
@@ -101,7 +100,7 @@ async function getPokemonNames(offset = 0, limit = totalNumberOfPokemon) {
 
 
 function concatenateLoadedPokemonArrays() {
-    loadedPokemon = loadedPokemon.concat(loadedPokemonForSearch);
+    loadedPokemon = loadedPokemon.concat(reloadedPokemonForSearch);
 }
 
 
