@@ -269,7 +269,7 @@ window.onscroll = async function () {
 
     if (current == maxHeight && loadedPokemon.length < totalNumberOfPokemon) {
         if (searchIsActive)
-            loadAndRenderFurtherSearchedPokemon(searchString);
+            loadAndRenderFurtherSearchedPokemon();
         else
             loadAndRenderPokemon();
     }

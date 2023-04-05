@@ -104,7 +104,7 @@ function setOnclickForNextCardButton(index) {
 
 async function onclickForNextCardButtonInLastCard(index) {
     if (searchIsActive)
-        await loadAndRenderFurtherSearchedPokemon(searchString);
+        await loadAndRenderFurtherSearchedPokemon();
     else
         await loadAndRenderPokemon();
     openPokecard(index + 1);
@@ -127,7 +127,7 @@ async function isFirstIndexOfSearchedPokemon(index) {
 
 
 async function isFirstSearchedName(index) {
-    let searchedNames = await getSearchedPokemonNames(searchString);
+    let searchedNames = await getSearchedPokemonNames();
     return getLoadedPokemonName(index) === searchedNames.at(0);
 }
 
@@ -148,7 +148,7 @@ async function isLastIndexOfSearchedPokemon(index) {
 
 
 async function isLastSearchedName(index) {
-    let searchedNames = await getSearchedPokemonNames(searchString);
+    let searchedNames = await getSearchedPokemonNames();
     return getLoadedPokemonName(index) === searchedNames.at(-1);
 }
 

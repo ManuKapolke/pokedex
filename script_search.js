@@ -8,14 +8,14 @@ async function search() {
     searchString = document.getElementById('search-input').value.toLowerCase();
 
     showLoadedPokemon();
-    removeUnsearchedPokemon(searchString);
-    await loadAndRenderFurtherSearchedPokemon(searchString);
+    removeUnsearchedPokemon();
+    await loadAndRenderFurtherSearchedPokemon();
     showElement('reset-btn');
 }
 
 
-function removeUnsearchedPokemon(searchString) {
-    const pokemonToRemove = getUnsearchedPokemonToRemove(searchString);
+function removeUnsearchedPokemon() {
+    const pokemonToRemove = getUnsearchedPokemonToRemove();
 
     for (let i = 0; i < pokemonToRemove.length; i++) {
         const index = loadedPokemon.indexOf(pokemonToRemove[i]);
@@ -24,55 +24,67 @@ function removeUnsearchedPokemon(searchString) {
 }
 
 
-function getUnsearchedPokemonToRemove(searchString) {
+function getUnsearchedPokemonToRemove() {
     return loadedPokemon.filter(obj =>
         !obj.name.toLowerCase().includes(searchString)
     )
 }
 
 
-async function loadAndRenderFurtherSearchedPokemon(searchString) {
+async function loadAndRenderFurtherSearchedPokemon() {
     showElement('loader');
-    await loadFurtherSearchedPokemon(searchString);
+    await loadFurtherSearchedPokemon();
     concatenateLoadedPokemonArrays();
-    // console.log('Loaded pokemon:', loadedPokemon);
     renderPokemon();
-    numberOfRenderedPokemon += loadedPokemonForSearch.length;
-    // console.log('#rendered pokemon:', numberOfRenderedPokemon);
     removeElement('loader');
+    numberOfRenderedPokemon += loadedPokemonForSearch.length;
 }
 
 
-async function loadFurtherSearchedPokemon(searchString, loadCount = LOAD_LIMIT) {
+async function loadFurtherSearchedPokemon(loadCount = LOAD_LIMIT) {
     loadedPokemonForSearch = [];
-    let offset = loadedPokemon.length;
-    let names = await getSearchedPokemonNames(searchString);
-
-    // console.log('Searched names:', names);
-
-    const searchedPokemonAlreadyLoaded = loadedPokemon.filter(obj => obj.name.toLowerCase().includes(searchString));
-
-    let firstIndexToLoad = 0;
-    if (searchedPokemonAlreadyLoaded.length) {
-        firstIndexToLoad = names.indexOf(searchedPokemonAlreadyLoaded.at(-1)['name']) + 1;
-    }
-    const numberOfNamesToLoad = Math.min(names.length - firstIndexToLoad, loadCount);
-    const lastIndexToLoadExcluded = firstIndexToLoad + numberOfNamesToLoad;
-    let namesToLoad = names.slice(firstIndexToLoad, lastIndexToLoadExcluded)
-    // console.log('Searched names to load:', namesToLoad);
+    let namesToLoad = await getUnloadedSearchedPokemonNames(loadCount);
 
     for (let i = 0; i < namesToLoad.length; i++) {
         const url = getPokemonDetailsURL(namesToLoad[i]);
         let pokemon = await fetchAsJson(url);
         loadedPokemonForSearch.push(pokemon);
     }
-    // console.log('Searched pokemon:', loadedPokemonForSearch);
 }
 
 
-async function getSearchedPokemonNames(searchString, offset = 0, limit = totalNumberOfPokemon) {
+async function getUnloadedSearchedPokemonNames(loadCount = LOAD_LIMIT) {
+    let names = await getSearchedPokemonNames();
+    const firstIndex = getFirstIndexToLoad(names);
+    const lastIndexExcluded = getLastIndexToLoadExcluded(names, firstIndex, loadCount);
+    return names.slice(firstIndex, lastIndexExcluded);
+}
+
+
+async function getSearchedPokemonNames(offset = 0, limit = totalNumberOfPokemon) {
     let names = await getPokemonNames(offset, limit);
     return names.filter(name => name.toLowerCase().includes(searchString));
+}
+
+
+function getFirstIndexToLoad(names) {
+    const loadedSearchedPokemon = getLoadedSearchedPokemon();
+    let firstIndexToLoad = 0;
+    if (loadedSearchedPokemon.length) {
+        firstIndexToLoad = names.indexOf(loadedSearchedPokemon.at(-1)['name']) + 1;
+    }
+    return firstIndexToLoad;
+}
+
+
+function getLoadedSearchedPokemon() {
+    return loadedPokemon.filter(obj => obj.name.toLowerCase().includes(searchString));
+}
+
+
+function getLastIndexToLoadExcluded(names, firstIndexToLoad, loadCount) {
+    const numberOfNamesToLoad = Math.min(names.length - firstIndexToLoad, loadCount);
+    return firstIndexToLoad + numberOfNamesToLoad;
 }
 
 
