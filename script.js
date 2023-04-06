@@ -2,6 +2,7 @@ const LOAD_LIMIT = 20;
 const LBS_IN_KG = 0.453592;
 const FT_IN_CM = 30.48;
 const MAX_STAT_VALUE = 160;
+const MOVES_FITTING_WITHOUT_SCROLLBAR = 12;
 let loadedPokemon = [];
 let numberOfRenderedPokemon = 0;
 let totalNumberOfPokemon;

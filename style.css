@@ -309,8 +309,6 @@ th {
 }
 
 #nav-moves {
-    display: flex;
-    justify-content: center;
     padding-top: 8px;
 }
 
@@ -320,11 +318,12 @@ th {
     display: flex;
     flex-flow: row wrap;
     overflow: auto;
+    margin: 0 auto;
 }
 
 #moves-container div {
     width: 84px;
-    height: 60px;
+    height: 58px;
     display: flex;
     justify-content: center;
     align-items: center;

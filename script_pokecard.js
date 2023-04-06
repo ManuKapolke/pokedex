@@ -225,10 +225,16 @@ function renderStatsTab(index) {
 function renderMovesTab(index) {
     const moves = getLoadedPokemonMoves(index);
     clearElement('moves-container');
+    setWidthOfMovesContainer(moves.length);
     for (let i = 0; i < moves.length; i++) {
         const move = moves[i];
         document.getElementById('moves-container').innerHTML += `<div id="move-${index}-${i}">${move}</div>`;
     }
+}
+
+
+function setWidthOfMovesContainer(numberOfMoves) {
+    document.getElementById('moves-container').style.width = numberOfMoves > MOVES_FITTING_WITHOUT_SCROLLBAR ? '270px' : '252px';
 }
 
 
