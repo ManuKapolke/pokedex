@@ -1,0 +1,24 @@
+@media (max-width: 700px) {
+    #scroll-down {
+        width: 90%;
+        bottom: 8px;
+    }
+
+    .container-fluid {
+        flex-direction: column;
+    }
+
+    #search-form {
+        margin-top: 12px;
+    }
+
+    #search-btn,
+    #reset-btn {
+        background-color: #24282B;
+    }
+
+    #search-btn:hover,
+    #reset-btn:hover {
+        background-color: var(--bs-btn-hover-bg);
+    }
+}

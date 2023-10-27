@@ -1,0 +1,11 @@
+.d-none {
+    display: none;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.no-scrolling {
+    overflow: hidden;
+}
