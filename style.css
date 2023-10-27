@@ -1,9 +1,11 @@
 body {
     margin: 0;
+    min-height: 110vh;
+    padding: 0 5vw;
     display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     scrollbar-gutter: stable;
 }
 
@@ -18,6 +20,14 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+}
+
+#scroll-down {
+    width: 60%;
+    position: absolute;
+    bottom: 0;
 }
 
 ::-webkit-scrollbar {
@@ -36,11 +46,24 @@ body {
     background: #136b42;
 }
 
+#load-btn {
+    width: clamp(160px, 50%, 400px);
+    margin: 100px 0;
+    font-size: 1.5rem;
+    padding: 16px;
+}
+
 /*--------------------------------------------------
 Header
 ---------------------------------------------------*/
 header {
-    width: 100%;
+    /* width: 100%; */
+    height: 146px;
+    padding: 0 5vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 .pokedex-logo {
@@ -71,7 +94,7 @@ Container for all Pokemon ("Pokeboxes")
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 16px;
+    margin: 162px 0 300px 0;
 }
 
 .pokebox {
@@ -351,7 +374,12 @@ th {
 /*--------------------------------------------------
 Media Queries
 ---------------------------------------------------*/
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+    #scroll-down {
+        width: 90%;
+        bottom: 8px;
+    }
+
     .container-fluid {
         flex-direction: column;
     }

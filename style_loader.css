@@ -3,7 +3,8 @@
     border-radius: 100%;
     padding: 16px;
     position: fixed;
-    bottom: 16px;
+    top: calc(50% - 66px);
+    /* bottom: 16px; */
     left: calc(50% - 66px);
     z-index: 99;
 }

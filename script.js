@@ -265,13 +265,17 @@ function clearElement(id) {
 Load/Render On Scroll
 ---------------------------------------------------*/
 window.onscroll = async function () {
-    const current = document.documentElement.scrollTop + window.innerHeight;
+    const currentBottom = document.documentElement.scrollTop + window.innerHeight;
     const maxHeight = document.body.scrollHeight;
 
-    if (current == maxHeight && loadedPokemon.length < totalNumberOfPokemon) {
-        if (searchIsActive)
-            loadAndRenderFurtherSearchedPokemon();
-        else
-            loadAndRenderPokemon();
+    if (currentBottom == maxHeight && loadedPokemon.length < totalNumberOfPokemon) {
+        loadAndRenderFurtherPokemon();
     }
 };
+
+function loadAndRenderFurtherPokemon() {
+    if (searchIsActive)
+        loadAndRenderFurtherSearchedPokemon();
+    else
+        loadAndRenderPokemon();
+}

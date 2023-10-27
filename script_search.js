@@ -5,6 +5,7 @@ let searchString = '';
 async function search() {
     searchIsActive = true;
     searchString = document.getElementById('search-input').value.toLowerCase();
+    console.log(searchString);
 
     showLoadedPokemon();
     removeUnsearchedPokemon();
