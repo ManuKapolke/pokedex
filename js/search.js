@@ -1,26 +1,61 @@
 let reloadedPokemonForSearch = [];
 let searchString = '';
+let searchedPokemonNames = [];
+let numberOfSearchResults = 0;
 
 
 async function search() {
     searchIsActive = true;
     searchString = document.getElementById('search-input').value.toLowerCase();
-    console.log(searchString);
+    searchedPokemonNames = await getSearchedPokemonNames();
+    numberOfSearchResults = searchedPokemonNames.length;
 
     showLoadedPokemon();
     removeUnsearchedPokemon();
-    await loadAndRenderFurtherSearchedPokemon();
+
+    if (numberOfSearchResults === 0) {
+        document.getElementById('no-search-results').innerHTML = `There is no Pokémon with <i>${searchString}</i> in its name...`;
+        showElement('no-search-results');
+    } else {
+        await loadAndRenderFurtherSearchedPokemon();
+    }
+
     showElement('reset-btn');
 }
 
 
-function removeUnsearchedPokemon() {
-    const pokemonToRemove = getUnsearchedPokemonToRemove();
+async function getSearchedPokemonNames(offset = 0, limit = totalNumberOfPokemon) {
+    let names = await getPokemonNames(offset, limit);
+    return names.filter(name => name.toLowerCase().includes(searchString));
+}
 
-    for (let i = 0; i < pokemonToRemove.length; i++) {
-        const index = loadedPokemon.indexOf(pokemonToRemove[i]);
-        removeElement(`pokebox-${index}`);
+
+async function getPokemonNames(offset = 0, limit = totalNumberOfPokemon) {
+    let pokelist = await getShortlistOfNamesAndURLs(offset, limit);
+    let names = [];
+
+    for (let i = 0; i < pokelist['results'].length; i++) {
+        names.push(pokelist['results'][i]['name']);
     }
+
+    return names;
+}
+
+
+function showLoadedPokemon() {
+    removeElement('no-search-results');
+
+    for (let i = 0; i < loadedPokemon.length; i++) {
+        showElement(`pokebox-${i}`);
+    }
+}
+
+
+function removeUnsearchedPokemon() {
+    getUnsearchedPokemonToRemove().forEach(pokemon => {
+        const index = loadedPokemon.indexOf(pokemon);
+        removeElement(`pokebox-${index}`);
+    });
 }
 
 
@@ -54,16 +89,10 @@ async function loadFurtherSearchedPokemon(loadCount = LOAD_LIMIT) {
 
 
 async function getUnloadedSearchedPokemonNames(loadCount = LOAD_LIMIT) {
-    let names = await getSearchedPokemonNames();
+    const names = searchedPokemonNames;
     const firstIndex = getFirstIndexToLoad(names);
     const lastIndexExcluded = getLastIndexToLoadExcluded(names, firstIndex, loadCount);
     return names.slice(firstIndex, lastIndexExcluded);
-}
-
-
-async function getSearchedPokemonNames(offset = 0, limit = totalNumberOfPokemon) {
-    let names = await getPokemonNames(offset, limit);
-    return names.filter(name => name.toLowerCase().includes(searchString));
 }
 
 
@@ -88,18 +117,6 @@ function getLastIndexToLoadExcluded(names, firstIndexToLoad, loadCount) {
 }
 
 
-async function getPokemonNames(offset = 0, limit = totalNumberOfPokemon) {
-    let pokelist = await getShortlistOfNamesAndURLs(offset, limit);
-    let names = [];
-
-    for (let i = 0; i < pokelist['results'].length; i++) {
-        names.push(pokelist['results'][i]['name']);
-    }
-
-    return names;
-}
-
-
 function concatenateLoadedPokemonArrays() {
     loadedPokemon = loadedPokemon.concat(reloadedPokemonForSearch);
 }
@@ -110,11 +127,4 @@ function closeSearch() {
     document.getElementById('search-input').value = '';
     showLoadedPokemon();
     hideElement('reset-btn');
-}
-
-
-function showLoadedPokemon() {
-    for (let i = 0; i < loadedPokemon.length; i++) {
-        showElement(`pokebox-${i}`);
-    }
 }
